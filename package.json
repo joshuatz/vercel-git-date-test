@@ -1,0 +1,14 @@
+{
+	"name": "vercel-git-date-test",
+	"version": "1.0.0",
+	"main": "index.js",
+	"repository": "https://github.com/joshuatz/vercel-git-date-test",
+	"author": {
+		"name": "Joshua Tzucker",
+		"url": "https://joshuatz.com"
+	},
+	"license": "MIT",
+	"dependencies": {
+		"git-date-extractor": "^3.1.0"
+	}
+}
