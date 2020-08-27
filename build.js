@@ -2,6 +2,11 @@
 
 const fs = require('fs');
 const gitDateExtractor = require('git-date-extractor');
+const childProc = require('child_process');
+
+const getGitLog = () => {
+	return childProc.execSync(`git log --pretty=fuller`).toString();
+};
 
 const builder = async () => {
 	const gitDates = await gitDateExtractor.getStamps({
@@ -25,6 +30,11 @@ const getTemplateHtml = (stampInfo) => {
 	<meta name='viewport' content='width=device-width, initial-scale=1'>
 </head>
 <body>
+	<h2>Git Log: </h2>
+	<pre>
+	${getGitLog()}
+	</pre>
+	<h2>Stamps:</h2>
 	<pre>
 	${JSON.stringify(stampInfo, null, '\t')}
 	</pre>
