@@ -4,8 +4,19 @@ const fs = require('fs');
 const gitDateExtractor = require('git-date-extractor');
 const childProc = require('child_process');
 
-const getGitLog = () => {
-	return childProc.execSync(`git log --pretty=fuller`).toString();
+/** @param {string} [dir] */
+const getGitLog = (dir) => {
+	return execWithDir(`git log --pretty=fuller`, dir);
+};
+
+/**
+ * @param {string} cmd
+ * @param {string} [dir]
+ * @returns {string} res
+ */
+const execWithDir = (cmd, dir) => {
+	const opts = dir ? { cwd: dir } : {};
+	return childProc.execSync(cmd, opts).toString();
 };
 
 const builder = async () => {
@@ -15,7 +26,17 @@ const builder = async () => {
 	if (!fs.existsSync('./public')) {
 		fs.mkdirSync('./public');
 	}
+	if (fs.existsSync('/vercel')) {
+		vercelBuildDebug();
+	}
 	fs.writeFileSync('./public/index.html', getTemplateHtml(gitDates));
+};
+
+const vercelBuildDebug = () => {
+	const rootDir = `/vercel`;
+	console.log(getGitLog(rootDir));
+	console.log(execWithDir(`git rev-list --count HEAD`));
+	console.log(execWithDir(`git rev-list --count HEAD`, rootDir));
 };
 
 /** @param {Record<string, any>} stampInfo */
