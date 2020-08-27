@@ -16,7 +16,12 @@ const getGitLog = (dir) => {
  */
 const execWithDir = (cmd, dir) => {
 	const opts = dir ? { cwd: dir } : {};
-	return childProc.execSync(cmd, opts).toString();
+	try {
+		const res = childProc.execSync(cmd, opts).toString();
+		return res;
+	} catch (e) {
+		console.log(`Fatal error with exec:`, e.toString());
+	}
 };
 
 const builder = async () => {
@@ -34,6 +39,8 @@ const builder = async () => {
 
 const vercelBuildDebug = () => {
 	const rootDir = `/vercel`;
+	console.log(`ls -a`);
+	console.log(getGitLog());
 	console.log(getGitLog(rootDir));
 	console.log(execWithDir(`git rev-list --count HEAD`));
 	console.log(execWithDir(`git rev-list --count HEAD`, rootDir));
