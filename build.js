@@ -52,7 +52,7 @@ const vercelBuildDebug = () => {
 		secondToLast: execWithDir(`git show -s HEAD~1`),
 		thirdToLast: execWithDir(`git show -s HEAD~2`)
 	};
-	console.log({
+	const buildDebugInfo = {
 		fileListDeploy,
 		fileListRoot,
 		gitLog,
@@ -60,7 +60,9 @@ const vercelBuildDebug = () => {
 		remotesList,
 		branchName,
 		commits
-	});
+	};
+	console.log(JSON.stringify(buildDebugInfo, null, 4));
+	fs.writeFileSync('./public/build-debug.txt', JSON.stringify(buildDebugInfo));
 };
 
 /** @param {Record<string, any>} stampInfo */
