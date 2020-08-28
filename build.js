@@ -44,6 +44,10 @@ const vercelBuildDebug = () => {
 	console.log(getGitLog(rootDir));
 	console.log(execWithDir(`git rev-list --count HEAD`));
 	console.log(execWithDir(`git rev-list --count HEAD`, rootDir));
+	console.log(execWithDir(`git remote -v`));
+	console.log(execWithDir(`git branch -vv`));
+	// Curious if this will work
+	console.log(execWithDir(`git show -s HEAD~2`));
 };
 
 /** @param {Record<string, any>} stampInfo */
