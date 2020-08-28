@@ -44,8 +44,10 @@ const vercelBuildDebug = () => {
 	const gitLog = getGitLog();
 	const commitCount = execWithDir(`git rev-list --count HEAD`);
 	const remotesList = execWithDir(`git remote -v`);
-	const branchName = execWithDir(`git symbolic-ref --short HEAD`) || execWithDir(`git rev-parse --abbrev-ref HEAD`);
+	const currBranch = execWithDir(`git symbolic-ref --short HEAD`) || execWithDir(`git rev-parse --abbrev-ref HEAD`);
 	console.log(execWithDir(`git branch -vv`));
+	const allBranches = execWithDir(`git branch`);
+	const changedFiles = execWithDir(`git show HEAD --name-only --format=%b`);
 	// Curious if this will work
 	const commits = {
 		last: execWithDir(`git show -s HEAD`),
@@ -58,8 +60,10 @@ const vercelBuildDebug = () => {
 		gitLog,
 		commitCount,
 		remotesList,
-		branchName,
-		commits
+		currBranch,
+		allBranches,
+		commits,
+		changedFiles
 	};
 	console.log(JSON.stringify(buildDebugInfo, null, 4));
 	fs.writeFileSync('./public/build-debug.txt', JSON.stringify(buildDebugInfo));
