@@ -39,15 +39,28 @@ const builder = async () => {
 
 const vercelBuildDebug = () => {
 	const rootDir = `/vercel`;
-	console.log(`ls -a`);
-	console.log(getGitLog());
-	console.log(getGitLog(rootDir));
-	console.log(execWithDir(`git rev-list --count HEAD`));
-	console.log(execWithDir(`git rev-list --count HEAD`, rootDir));
-	console.log(execWithDir(`git remote -v`));
+	const fileListDeploy = execWithDir(`ls -a`);
+	const fileListRoot = execWithDir(`ls -a`, rootDir);
+	const gitLog = getGitLog();
+	const commitCount = execWithDir(`git rev-list --count HEAD`);
+	const remotesList = execWithDir(`git remote -v`);
+	const branchName = execWithDir(`git symbolic-ref --short HEAD`) || execWithDir(`git rev-parse --abbrev-ref HEAD`);
 	console.log(execWithDir(`git branch -vv`));
 	// Curious if this will work
-	console.log(execWithDir(`git show -s HEAD~2`));
+	const commits = {
+		last: execWithDir(`git show -s HEAD`),
+		secondToLast: execWithDir(`git show -s HEAD~1`),
+		thirdToLast: execWithDir(`git show -s HEAD~2`)
+	};
+	console.log({
+		fileListDeploy,
+		fileListRoot,
+		gitLog,
+		commitCount,
+		remotesList,
+		branchName,
+		commits
+	});
 };
 
 /** @param {Record<string, any>} stampInfo */
